@@ -56,14 +56,12 @@ func main() {
         panic(fmt.Sprintf("Cannot open file %s: %a", fname, err))
     }
     loadFile(cpu, imagefile)
-    asm, end := cpu.Disassemble(0)
-    fmt.Printf("\nnext: %s (%d words, %x)\n", asm, end, cpu.Ram[0])
     for {
         var dummy [1]byte
-        os.Stdin.Read(dummy[:])
-        cpu.Step()
         display(cpu)
         asm, end := cpu.Disassemble(cpu.Pc)
-        fmt.Printf("\nnext: %s (%d words, %x)\n", asm, end - cpu.Pc, cpu.Ram[cpu.Pc])
+        fmt.Printf("\nnext: %s (%d words, %x)\n(Enter to advance, ^C to quit)\n", asm, end - cpu.Pc, cpu.Ram[cpu.Pc])
+        os.Stdin.Read(dummy[:])
+        cpu.Step()
     }
 }
